@@ -1,7 +1,8 @@
 const Sequelize = require('sequelize');
 const dbConfig = require('./config');
+require('dotenv').config();
 
-const sequelize = new Sequelize(dbConfig.development);
+const sequelize = new Sequelize(process.env.NODE_ENV === "development" ? dbConfig.development : dbConfig.production);
 
 const connectToDatabase = async () => {
     try {
