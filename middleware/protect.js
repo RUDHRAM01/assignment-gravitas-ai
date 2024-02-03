@@ -1,8 +1,8 @@
 const User = require('../models/user');
+const jwt = require('jsonwebtoken');
 
 const protect = async (req, res, next) => {
-    let token;
-
+    let token; 
     if (
         req.headers.authorization &&
         req.headers.authorization.startsWith('Bearer')
@@ -16,8 +16,8 @@ const protect = async (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    
-        const user =  await User.findOne({ where: { id : decoded.id } }).select('-password');
+
+        const user =  await User.findOne({ where: { id : decoded.id } });
         if(!user) {
             return res.status(401).json({ msg: 'Unauthorized request' });
         } else {
@@ -25,9 +25,12 @@ const protect = async (req, res, next) => {
             next(); 
         }
     } catch (err) {
+        console.error(err);
+        
         if (err.name === 'JsonWebTokenError' && err.message === 'jwt malformed') {
             return res.status(401).json({ msg: 'Malformed token. Please provide a valid token.' });
         }
+
         return res.status(401).json({ msg: 'Not authorized, token failed' });
     }
 }
