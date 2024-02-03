@@ -13,14 +13,14 @@ const VerifyEmail = async (req, res) => {
     try {
         const user = await User.findOne({ where: { id: data.id } });
         if (user.isAuthenticated) {
-            return res.status(400).json({ msg: 'User already authenticated' });
+            res.redirect('https://assignment-gravitas-ai-frontend.vercel.app/login');
         }
         if (!user) {
             return res.status(400).json({ msg: 'Invalid token' });
         }
         user.isAuthenticated = true;
         await user.save();
-        res.status(200).json({ msg: 'User authenticated' });
+        res.redirect('https://assignment-gravitas-ai-frontend.vercel.app/login');
     }
     catch (error) {
         res.status(500).json({ message: 'Internal server error' });
