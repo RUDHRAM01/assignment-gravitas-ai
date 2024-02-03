@@ -14,7 +14,8 @@ const LoginUser = async (req, res) => {
 
     try {
         const user = await User.findOne({ where: { email } });
-        const passwordMatch = bcrypt.compare(password, user.password);
+        const passwordMatch = await bcrypt.compare(password, user.password);
+
         if (!passwordMatch) {
             return res.status(401).json({ msg: 'Invalid credentials' });
         }
@@ -25,7 +26,7 @@ const LoginUser = async (req, res) => {
             const token = jwt.sign({
                 id: user.id,
                 email: user.email
-            }, process.env.JWT_SECRET, { expiresIn: 3600 });
+            }, process.env.JWT_SECRET, { expiresIn: '30d' });
             res.status(200).json({
                 token,
                 user: {
@@ -44,6 +45,8 @@ const LoginUser = async (req, res) => {
 
 const RegisterUser = async (req, res) => {
     const { email, password } = req.body;
+    console.log(email,password);
+    
     if (!email || !password) {
         return res.status(400).json({ msg: 'Please enter all fields' });
     }
