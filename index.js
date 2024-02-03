@@ -12,7 +12,7 @@ const { protect } = require('./middleware/protect');
 app.use(cors());
 app.use(bodyParser.json());
 
-app.use('/api/user',protect, userRouter);
+app.use('/api/user', userRouter);
 app.use('/api/record',protect, recordRouter);
 app.use('/api/auth/verify', VerifyEmail);
 
