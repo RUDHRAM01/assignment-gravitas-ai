@@ -23,7 +23,7 @@ const sendVerifyMail = (email, id) => {
     <table width="600" cellpadding="0" cellspacing="0" style="margin:auto; background-color:#f8f9fa; border:1px solid #e0e0e0; padding:20px;">
         <tr>
             <td style="text-align:center; padding:20px; background-color:#ffffff;">
-                <img src="" alt="Logo" style="max-width:100%; height:auto;">
+                <img src="https://www.gravitas.ai/favicon.ico" alt="Logo" style="max-width:100%; height:auto;">
             </td>
         </tr>
         <tr>
@@ -31,7 +31,7 @@ const sendVerifyMail = (email, id) => {
 
                 <h1 style="font-size:24px; font-family: Arial, sans-serif; color:#333333;">Welcome to Our Service!</h1>
                 <p style="font-size:16px; font-family: Arial, sans-serif; color:#666666; line-height:1.5;">Thank you for signing up for our service. We are excited to have you on board!</p>
-                <a href="http://localhost:3000/api/auth/verify?id=${id}" style="display:inline-block; background-color:#28a745; color:#ffffff; text-decoration:none; padding:10px 20px; margin-top:20px; border-radius:4px; font-family: Arial, sans-serif;">Verify Email</a>
+                <a href="https://gravitas-ai-backend.onrender.com/api/auth/verify?id=${id}" style="display:inline-block; background-color:#28a745; color:#ffffff; text-decoration:none; padding:10px 20px; margin-top:20px; border-radius:4px; font-family: Arial, sans-serif;">Verify Email</a>
             </td>
         </tr>
         
