@@ -16,13 +16,10 @@ const LoginUser = async (req, res) => {
         const user = await User.findOne({ where: { email } });
         const passwordMatch = await bcrypt.compare(password, user.password);
 
-        if (!passwordMatch) {
-            return res.status(401).json({ msg: 'Invalid credentials' });
-        }
-        if (!user.isAuthenticated) {
-
-            return res.status(401).json({ msg: 'User not authenticated' });
-        }else if (user) {
+        if (user) {
+            if (!user.isAuthenticated) return res.status(400).json({ msg: 'Please verify your email' });
+            if (!passwordMatch) return res.status(401).json({ msg: 'Invalid credentials' });
+            
             const token = jwt.sign({
                 id: user.id,
                 email: user.email
