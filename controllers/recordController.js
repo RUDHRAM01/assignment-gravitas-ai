@@ -1,14 +1,15 @@
 const Record = require('../models/record');
 
 const CreateRecord = async (req, res) => {
-    const { title, description } = req.body;
-    if (!title || !description) {
+    const { title, body } = req.body;
+    if (!title || !body) {
         return res.status(400).json({ msg: 'Please enter all fields' });
     }
     try {
         const record = await Record.create({
             title,
-            description
+            description : body,
+            userId : req.user.id
         });
         res.status(201).json(record);
     }
@@ -19,17 +20,15 @@ const CreateRecord = async (req, res) => {
 
 
 const GetRecords = async (req, res) => {
-    const { id } = req.params;
     try {
-        if (id) {
-            const record = await Record.findOne({ where: { id } });
+        if (req.user.id) {
+            const record = await Record.findAll({ where: { userId: req.user.id } });
             if (!record) {
                 return res.status(404).json({ msg: 'Record not found' });
+            } else {
+                res.status(200).json(record);
             }
-            return res.status(200).json(record);
         }
-        const records = await Record.findAll();
-        res.status(200).json(records);
     }
     catch (error) {
         res.status(500).json({ message: 'Internal server error' });
@@ -42,8 +41,9 @@ const GetRecordById = async (req, res) => {
         const record = await Record.findOne({ where: { id } });
         if (!record) {
             return res.status(404).json({ msg: 'Record not found' });
+        } else {
+            res.status(200).json(record);
         }
-        res.status(200).json(record);
     }
     catch (error) {
         res.status(500).json({ message: 'Internal server error' });
@@ -53,8 +53,8 @@ const GetRecordById = async (req, res) => {
 
 const UpdateRecord = async (req, res) => {
     const { id } = req.params;
-    const { title, description } = req.body;
-    if (!title || !description) {
+    const { title, body } = req.body;
+    if (!title || !body) {
         return res.status(400).json({ msg: 'Please enter all fields' });
     }
     try {
@@ -63,7 +63,7 @@ const UpdateRecord = async (req, res) => {
             return res.status(404).json({ msg: 'Record not found' });
         }
         record.title = title;
-        record.description = description;
+        record.description = body;
         await record.save();
         res.status(200).json(record);
     }
