@@ -42,12 +42,11 @@ const LoginUser = async (req, res) => {
 }
 
 const RegisterUser = async (req, res) => {
-    const { email, password } = req.body;
-    console.log(email,password);
-    
+    const { email, password } = req.body; 
     if (!email || !password) {
         return res.status(400).json({ msg: 'Please enter all fields' });
     }
+    password = password.trim();
     if(password.length < 6) return res.status(400).json({ msg: 'Password must be at least 6 characters' });
     try {
         const user = await User.findOne({ where: { email } });
@@ -59,7 +58,6 @@ const RegisterUser = async (req, res) => {
                     email: user.email
                 }, process.env.JWT_SECRET, { expiresIn: 3600 });
                 const mail = sendVerifyMail(email, token);
-                console.log(mail);
                 if (!mail) {
                     return res.status(500).json({ msg: 'Internal server error' });
                 }
@@ -83,8 +81,6 @@ const RegisterUser = async (req, res) => {
         }
     }
     catch (error) {
-        console.log(error);
-
         res.status(500).json({ message: 'Internal server error' });
     }
 }
